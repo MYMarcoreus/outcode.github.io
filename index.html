@@ -1,0 +1,194 @@
+#define _GNU_SOURCE 1
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <assert.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <poll.h>
+
+#include <libgen.h>    // basename
+
+#define USER_LIMIT 5
+#define BUFFER_SIZE 64
+#define FD_LIMIT 65535
+
+struct client_data
+{
+    sockaddr_in address;
+    char* write_buf;
+    char buf[ BUFFER_SIZE ];
+};
+
+int setnonblocking( int fd )
+{
+    int old_option = fcntl( fd, F_GETFL );
+    int new_option = old_option | O_NONBLOCK;
+    fcntl( fd, F_SETFL, new_option );
+    return old_option;
+}
+
+int main( int argc, char* argv[] )
+{
+    int ret = 0;
+    struct sockaddr_in address;
+    bzero( &address, sizeof( address ) );
+    address.sin_family = AF_INET;
+	address.sin_addr.s_addr=htonl(INADDR_ANY);
+    address.sin_port = htons( atoi( "9190" ) );
+
+    int listenfd = socket( PF_INET, SOCK_STREAM, 0 ); assert( listenfd != -1 );
+    ret = bind( listenfd, ( struct sockaddr* )&address, sizeof( address ) ); assert( ret != -1 );
+    ret = listen( listenfd, 5 ); assert( ret != -1 );
+
+
+    // 初始化pollfd类型的fds
+    pollfd fds[USER_LIMIT+1];
+    for( int i = 1; i <= USER_LIMIT; ++i ) {
+        fds[i].fd = -1;
+        fds[i].events = 0;
+    }
+    int user_counter = 0;
+    // 添加监听套接字的事件
+    fds[user_counter].fd      = listenfd;
+    fds[user_counter].events  = POLLIN | POLLERR;
+    fds[user_counter].revents = 0;
+
+    client_data* users = new client_data[FD_LIMIT];
+    while(1)
+    {
+        ret = poll( fds, user_counter+1, -1 );
+        if ( ret == -1 ) {
+            printf( "poll failure\n" );
+            break;
+        }
+
+        // 遍历所有套接字（包括监听套接字，所有要+1）
+        for( int i = 0; i < user_counter+1; ++i )
+        {
+            //! 有新的连接
+            if( ( fds[i].fd == listenfd ) && ( fds[i].revents & POLLIN ) )
+            {
+                struct sockaddr_in client_address;
+                socklen_t client_addrlength = sizeof( client_address );
+                int connfd = accept( listenfd, ( struct sockaddr* )&client_address, &client_addrlength );
+                if ( connfd == -1 )
+                {
+                    printf( "errno is: %d\n", errno );
+                    continue;
+                }
+                // 已连接的用户数大于最大用户数，则不允许连接
+                if( user_counter >= USER_LIMIT )
+                {
+                    const char* info = "too many users\n";
+                    printf( "%s", info );
+                    send( connfd, info, strlen( info ), 0 );
+                    close( connfd );
+                    continue;
+                }
+                user_counter++;
+                users[connfd].address = client_address;
+                setnonblocking( connfd ); // 套接字使用非阻塞IO
+                fds[user_counter].fd = connfd;
+                fds[user_counter].events = POLLIN | POLLRDHUP | POLLERR;
+                fds[user_counter].revents = 0;
+                printf( "comes a new user, now have %d users\n", user_counter );
+            }
+            //! 错误事件
+            else if( fds[i].revents & POLLERR )
+            {
+                printf( "get an error from %d\n", fds[i].fd );
+                char errors[ 100 ];
+                memset( errors, '\0', 100 );
+                socklen_t length = sizeof( errors );
+                if( getsockopt( fds[i].fd, SOL_SOCKET, SO_ERROR, &errors, &length ) < 0 ) {
+                    printf( "get socket option failed\n" );
+                }
+                continue;
+            }
+            //! 客户端关闭了TCP连接/写操作
+            else if( fds[i].revents & POLLRDHUP )
+            {
+                // 用户数-1，因此将数组尾部的用户移到退出的用户位置上
+                users[fds[i].fd] = users[fds[user_counter].fd];
+                close( fds[i].fd );
+                fds[i--] = fds[user_counter--];
+                printf( "a client left\n" );
+                continue;
+            }
+            //! 客户端发送信息
+            else if( fds[i].revents & POLLIN )
+            {
+                int connfd = fds[i].fd;
+                memset( users[connfd].buf, '\0', BUFFER_SIZE );
+                ret = recv( connfd, users[connfd].buf, BUFFER_SIZE-1, 0 ); // 非阻塞recv
+                printf( "get %d bytes of client data %s from %d\n", ret, users[connfd].buf, connfd );
+                if( ret < 0 )
+                {
+                    // 有读事件但是接收缓冲没有数据，因此断开用户连接
+                    if( errno != EAGAIN )
+                    {
+                        close( connfd );
+                        users[fds[i].fd] = users[fds[user_counter].fd];
+                        fds[i--] = fds[user_counter--];
+                    }
+                } else
+                if( ret == 0 ) {
+                    printf( "code should not come to here\n" );
+                } else {
+                    // 给除了消息发送者以外的每个用户注册写事件并填充写buf（使得将本人的信息转发给聊天室的其他人）
+                    for( int j = 1; j <= user_counter; ++j )
+                    {
+                        if( fds[j].fd == connfd ) {
+                            continue;
+                        }
+
+                        // 为了其他用户的write_buf不被覆盖，故暂时注销其他用户的读事件
+                        fds[j].events |= ~POLLIN;
+                        // 注册其他用户的写事件以转发该消息
+                        fds[j].events |= POLLOUT;
+                        // 其他用户的写缓存write_buf是发送消息用户的接收缓存buf
+                        users[fds[j].fd].write_buf = users[connfd].buf;
+
+                        /* 可能会担心为什么不注销消息发送者的读事件呢？同一个消息发送者再次发送消息
+                        然后将users[connfd].buf中的消息给冲刷掉导致users[fds[j].fd].write_buf更换了内容
+                            其实并不会的，因为本次i循环后需要再遍历一圈才会到达这次的消息发送者
+                        而通过这一轮我们已经将消息发送者的消息转发出去了
+                        */
+                        /* 真正值得担心的是在转发消息的一轮中，有别的消息发送者的消息到来，
+                        因为在i循环的if判断中对读事件POLLIN的优先级要比POLLOUT高，
+                        可能会导致我们读入了这个新消息到users[connfd].buf中，
+                        然后新消息冲刷掉还未发送的旧消息所在的write_buf
+                        */
+                    }
+                }
+            }
+            //! 要转发用户消息（由用户套接字的读事件触发的写事件）
+            //! （POLLIN检测必须在POLLOUT前！）
+            //! 因为如果POLLOUT在POLLIN前，那么当第一次的POLLIN被触发，
+            //! 将除本消息发送者以外的用户的POLLOUT事件注册、POLLIN事件注销，
+            //! 在下一次i循环，一定会进入到POLLOUT块内，将当前套接字的write_buf设为NULL )
+            else if( fds[i].revents & POLLOUT )
+            {
+                int connfd = fds[i].fd;
+                if( users[connfd].write_buf == NULL ) {
+                    continue;
+                }
+                ret = send( connfd, users[connfd].write_buf, strlen( users[connfd].write_buf ), 0 );
+                // 转发完后，注销写事件，恢复读事件
+                users[connfd].write_buf = NULL;
+                fds[i].events |= ~POLLOUT;
+                fds[i].events |= POLLIN;
+            }
+        }
+    }
+
+    delete [] users;
+    close( listenfd );
+    return 0;
+}
