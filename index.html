@@ -150,18 +150,23 @@
 
         <script>
             setTimeout(
-                function(){
-                    var notDate =  new Date();
-                    var 年 = notDate.getFullYear();
-                    var 月 = notDate.getMonth()+1;
-                    var 日 = notDate.getDate();
-                    var 时 = notDate.getHours();
-                    var 分 = notDate.getMinutes();
-                    var outTime  = `${年}-${月}-${日} ${时-1}:${分}`;
-                    var backTime = `${年}-${月}-${日} ${时+1}:${分}`;
+                 function(){
+                    var prevDate = new Date();
+                    var nextDate = new Date();
+                    prevDate.setHours( new Date().getHours() - 1);
+                    nextDate.setHours( new Date().getHours() + 1);
 
-                    document.getElementById('outtime' ).innerHTML = outTime;
-                    document.getElementById('backtime').innerHTML = backTime;
+                    prevDate.setMinutes(30);
+                    nextDate.setMinutes(30);
+
+                    prevDate.setSeconds(0);
+                    nextDate.setSeconds(0);
+
+                    var prevDateTxt = prevDate.format('yyyy-MM-dd hh:mm:ss');
+                    var nextDateTxt = nextDate.format('yyyy-MM-dd hh:mm:ss');
+
+                    document.getElementById('outtime' ).innerHTML = prevDateTxt;
+                    document.getElementById('backtime').innerHTML = nextDateTxt;
                 }, 0
             );
         </script>
