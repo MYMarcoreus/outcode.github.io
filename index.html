@@ -63,40 +63,51 @@
                         <div class="van-cell" data-v-fae8cc3a="">
                             <div class="van-cell__title"><span>姓名</span></div>
                             <div class="van-cell__value">
-                                <span id="stuname" class="text-black" data-v-fae8cc3a="" style="color: #9c9c9c">
+                                <span id="stuname" class="text-black" data-v-fae8cc3a="">
+                                    <font color = "#9c9c9c">
                                     韩金龙
+                                    </font>
                                 </span>
                             </div>
                         </div>
                         <div class="van-cell" data-v-fae8cc3a="">
                             <div class="van-cell__title"><span>学号</span></div>
                             <div class="van-cell__value">
-                                <span id="stuid" class="text-black" data-v-fae8cc3a="" style="color: #9c9c9c;">
-                                    3119114514
+                                <span id="stuid" class="text-black" data-v-fae8cc3a="">
+                                    <font color = "#9c9c9c">
+                                        3119114514
+                                    </font>
                                 </span>
                             </div>
                         </div>
                         <div class="van-cell" data-v-fae8cc3a="">
                             <div class="van-cell__title"><span>学院</span></div>
                             <div class="van-cell__value">
-                                <span class="text-black" data-v-fae8cc3a="" style="color: #9c9c9c;">
-                                    经济与贸易学院
+                                <span class="text-black" data-v-fae8cc3a="">
+                                    <font color = "#9c9c9c">
+                                        经济与贸易学院
+                                    </font>
                                 </span>
                             </div>
                         </div>
                         <div class="van-cell" data-v-fae8cc3a="">
                             <div class="van-cell__title"><span>专业</span></div>
                             <div class="van-cell__value">
-                                <span class="text-black" data-v-fae8cc3a="" style="color: #9c9c9c;">
-                                    金融工程
+                                <span class="text-black" data-v-fae8cc3a="">
+                                    <font color = "#9c9c9c">
+                                        金融工程
+                                    </font>
+
                                 </span>
                             </div>
                         </div>
                         <div class="van-cell" data-v-fae8cc3a="">
                             <div class="van-cell__title"><span>班级</span></div>
                             <div class="van-cell__value">
-                                <span class="text-black" data-v-fae8cc3a="" style="color: #9c9c9c;">
-                                    金融工程19(1)
+                                <span class="text-black" data-v-fae8cc3a="">
+                                    <font color = "#9c9c9c">
+                                        金融工程19(1)
+                                    </font>
                                 </span>
                             </div>
                         </div>
@@ -134,9 +145,9 @@
 
                 // 填入信息
                 if(stuName != null && stuName != "")
-                    document.getElementById('stuname' ).innerHTML = stuName;
+                    document.getElementById('stuname' ).innerHTML = "<font color = '#9c9c9c'>" + stuName + "</font>";
                 if(stuID   != null && stuID   != "")
-                    document.getElementById('stuid'   ).innerHTML = stuID;
+                    document.getElementById('stuid'   ).innerHTML = "<font color = '#9c9c9c'>" + stuID + "</font>";
 
                 // 删除输入框
                 document.getElementById("inputform").style.display="none";
