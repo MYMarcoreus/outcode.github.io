@@ -135,30 +135,12 @@
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
+
+    // 时钟
     setInterval("document.getElementById('dateTime').innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');", 1000);
-</script>
 
-<script>
-    setTimeout(
-        function () {
-            var prevDate = new Date();
-            var nextDate = new Date();
-            prevDate.setHours(new Date().getHours() - 1);
-            nextDate.setHours(new Date().getHours() + 1);
-
-            prevDate.setMinutes(30);
-            nextDate.setMinutes(30);
-
-            prevDate.setSeconds(0);
-            nextDate.setSeconds(0);
-
-            var prevDateTxt = prevDate.format('yyyy-MM-dd hh:mm:ss');
-            var nextDateTxt = nextDate.format('yyyy-MM-dd hh:mm:ss');
-
-            document.getElementById('outtime').innerHTML = prevDateTxt;
-            document.getElementById('backtime').innerHTML = nextDateTxt;
-        }, 0
-    );
+    document.getElementById('outtime').innerHTML = localStorage.getItem("prevDateTxt_s");
+    document.getElementById('backtime').innerHTML = localStorage.getItem("nextDateTxt_s");
 </script>
 
 </body>
