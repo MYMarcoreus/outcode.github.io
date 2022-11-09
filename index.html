@@ -9,7 +9,6 @@
         content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
     <meta name="apple-mobile/src-web-app-capable" content="yes">
     <meta name="apple-mobile/src-web-app-status-bar-style" content="black">
-    <!-- <meta name="author" content="广州职迅信息科技有限公司(https://jobsys.cn)"> -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -67,29 +66,18 @@
             var stuName = document.getElementById('input_name').value;
             var stuID   = document.getElementById('input_id'  ).value;
 
+            localStorage.setItem("stuname",stuName);
+            localStorage.setItem("stuid",stuID);
+
             // 删除输入框
             document.getElementById("inputform").style.display="none";
             document.getElementById("app").style.display="inline";
-        }
-
-        function go_there() {
-            var stuName = document.getElementById('input_name').value;
-            var stuID   = document.getElementById('input_id'  ).value;
-
-            console.log(stuName);
-            console.log(stuID);
-            localStorage.setItem("stuname",stuName);
-            localStorage.setItem("stuid",stuID);
-            window.location.href='./code.html';
         }
 
         // 添加事件
         document.getElementById("input_btn").addEventListener("click", link_start);
 
     </script>
-
-
-
 
     <div style="display:none" id="app" data-v-app="">
         <div id="app">
@@ -146,7 +134,7 @@
                         </div>
                         <div class="ex-card-footer btn-group" data-v-6a55dd86="">
                             <button type="button"
-                                onclick="go_there()"
+                                onclick="window.location.href='./outcode.html';"
                                 class="van-button van-button--primary van-button--small van-button--plain"
                                 data-v-6a55dd86="">
                                 <div class="van-button__content" >
@@ -2525,11 +2513,12 @@
                     <div class="van-list__placeholder"></div>
                 </div>
             </div>
-            <div class="van-action-bar"><button type="button"
+            <div class="van-action-bar">
+                <button type="button"
+                    onclick = "window.location.href='./outapply.html';"
                     class="van-button van-button--primary van-button--large van-action-bar-button van-action-bar-button--primary van-action-bar-button--last van-action-bar-button--first">
                     <div class="van-button__content">
-                        <!----><span class="van-button__text">申请外出</span>
-                        <!---->
+                        <span class="van-button__text">申请外出</span>
                     </div>
                 </button></div>
         </div>
