@@ -20,6 +20,7 @@
     <link href="./statics/chunk-vendors.ecb9d086.js" rel="preload" as="script">
     <link href="./statics/chunk-vendors.583191b8.css" rel="stylesheet">
     <link href="./statics/11845stu.aa8f741d.css" rel="stylesheet">
+    <script src="./statics/cookie.js"></script>
 
 </head>
 
@@ -67,7 +68,7 @@
                         <!-- <span id="stuname" class="text-black stuinfo" data-v-fae8cc3a="">
                                 韩金龙
                         </span> -->
-                        <input value="韩金龙" id="stuname" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
+                        <input value="韩金龙" id="stuName" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
@@ -76,7 +77,7 @@
                         <!-- <span id="stuid" class="text-black stuinfo" data-v-fae8cc3a="">
                                 3119114514
                         </span> -->
-                        <input value="3119114514" id="stuid" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
+                        <input value="3119114514" id="stuID" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
@@ -85,7 +86,7 @@
                         <!-- <span class="text-black stuinfo" data-v-fae8cc3a="">
                                 经济与贸易学院
                         </span> -->
-                        <input value="经济与贸易学院"  type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
+                        <input value="经济与贸易学院" id="stuSchool" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
@@ -94,7 +95,7 @@
                         <!-- <span class="text-black stuinfo" data-v-fae8cc3a="">
                                 金融工程
                         </span> -->
-                        <input value="金融工程"  type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
+                        <input value="金融工程" id="stuMajor" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
@@ -103,7 +104,7 @@
                         <!-- <span class="text-black stuinfo" data-v-fae8cc3a="">
                                 金融工程19(1)
                         </span> -->
-                        <input value="金融工程19(1)" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
+                        <input value="金融工程19(1)" id="stuFullClassName" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
             </div>
@@ -113,14 +114,31 @@
 
 
 <script>
-    var stuName = localStorage.getItem("stuname"); //获取指定key获取本地存储的值
-    var stuID = localStorage.getItem("stuid");     //获取指定key获取本地存储的值
+    //var stuName = localStorage.getItem("stuname"); //获取指定key获取本地存储的值
+    //var stuID = localStorage.getItem("stuid");     //获取指定key获取本地存储的值
+
+    var stuName   = getCookie("stuName"  );
+    var stuID     = getCookie("stuID"    );
+    var stuSchool = getCookie("stuSchool");
+    var stuMajor  = getCookie("stuMajor" );
+    var stuGrade  = getCookie("stuGrade" );
+    var stuClass  = getCookie("stuClass" );
+
+    console.log(stuName + stuID + stuSchool);
 
     // 填入信息
     if (stuName != null && stuName != "")
-        document.getElementById('stuname').innerHTML = "<font color = '#9c9c9c'>" + stuName + "</font>";
+        document.getElementById('stuName').innerHTML = stuName ;
     if (stuID != null && stuID != "")
-        document.getElementById('stuid').innerHTML = "<font color = '#9c9c9c'>" + stuID + "</font>";
+        document.getElementById('stuID').innerHTML = stuID;
+    if (stuSchool != null && stuSchool != "")
+        document.getElementById('stuSchool').innerHTML = stuSchool ;
+    if (stuID != null && stuID != "")
+        document.getElementById('stuMajor').innerHTML = stuMajor;
+    if (stuName != null && stuName != "")
+        document.getElementById('stuGrade').innerHTML = stuGrade ;
+    if (stuID != null && stuID != "")
+        document.getElementById('stuFullClassName').innerHTML = (stuMajor + stuGrade + "(" +stuClass + ")");
 </script>
 
 <script>
