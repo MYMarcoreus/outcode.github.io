@@ -19,7 +19,7 @@ function getCookie(ckey){
     for(var i=0; i<ca.length; i++) {
         var c = ca[i].trim();
         if (c.indexOf(key)==0)
-            return c.substring(key.length,c.length);
+            return decodeURIComponent(c.substring(key.length,c.length));
     }
     return "";
 }
