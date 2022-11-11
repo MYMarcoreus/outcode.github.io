@@ -128,17 +128,17 @@
 
     // 填入信息
     if (stuName != null && stuName != "")
-        document.getElementById('stuName').innerHTML = stuName ;
+        document.getElementById('stuName').value = stuName ;
     if (stuID != null && stuID != "")
-        document.getElementById('stuID').innerHTML = stuID;
+        document.getElementById('stuID').value = stuID;
     if (stuSchool != null && stuSchool != "")
-        document.getElementById('stuSchool').innerHTML = stuSchool ;
-    if (stuMajor != null && stuMajor != "")
-        document.getElementById('stuMajor').innerHTML = stuMajor;
-    if (stuGrade != null && stuGrade != "")
-        document.getElementById('stuGrade').innerHTML = stuGrade ;
-    if (stuClass != null && stuClass != "")
-        document.getElementById('stuFullClassName').innerHTML = (stuMajor + stuGrade + "(" +stuClass + ")");
+        document.getElementById('stuSchool').value = stuSchool ;
+    if (stuMajor != null && stuMajor != "") {
+        document.getElementById('stuMajor').value = stuMajor;
+        if (stuClass != null && stuClass != "" && stuGrade != null && stuGrade != "")
+            document.getElementById('stuFullClassName').value = (stuMajor + stuGrade + "(" +stuClass + ")");
+    }
+
 </script>
 
 <script>
