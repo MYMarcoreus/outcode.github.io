@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="zh_CN">
 
 <head>
@@ -19,7 +20,18 @@
     <link href="./statics/chunk-vendors.ecb9d086.js" rel="preload" as="script">
     <link href="./statics/chunk-vendors.583191b8.css" rel="stylesheet">
     <link href="./statics/11845stu.aa8f741d.css" rel="stylesheet">
+
 </head>
+
+<body>
+    <style>
+        .stuinfo {
+            color: #9c9c9c;
+        }
+        .time {
+            font-weight: bold;
+        }
+    </style>
 
 <div id="app" data-v-app="">
     <div id="app">
@@ -35,17 +47,15 @@
                 <div class="van-cell van-cell--large" data-v-fae8cc3a="">
                     <div class="van-cell__title"> <span>离校时间</span> </div>
                     <div class="van-cell__value">
-                        <span id="outtime" class="text-black" data-v-fae8cc3a="" style="font-weight: bold;">
-                            <!-- -->
-                        </span>
+                        <!-- <span id="outtime" class="text-black time" data-v-fae8cc3a="" > </span> -->
+                        <input value="" id="outtime" type="text" class="van-field__control van-field__control--right time" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell van-cell--large" data-v-fae8cc3a="">
                     <div class="van-cell__title"> <span>回校时间</span> </div>
                     <div class="van-cell__value">
-                        <span id="backtime" class="text-black" data-v-fae8cc3a="" style="font-weight: bold;">
-                            <!-- -->
-                        </span>
+                        <!-- <span id="backtime" class="text-black time" data-v-fae8cc3a="" > </span> -->
+                        <input value="" id="backtime" type="text" class="van-field__control van-field__control--right time" placeholder="可输入">
                     </div>
                 </div>
             </div>
@@ -54,52 +64,46 @@
                 <div class="van-cell" data-v-fae8cc3a="">
                     <div class="van-cell__title"><span>姓名</span></div>
                     <div class="van-cell__value">
-                        <span id="stuname" class="text-black" data-v-fae8cc3a="">
-                            <font color="#9c9c9c">
+                        <!-- <span id="stuname" class="text-black stuinfo" data-v-fae8cc3a="">
                                 韩金龙
-                            </font>
-                        </span>
+                        </span> -->
+                        <input value="韩金龙" id="stuname" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
                     <div class="van-cell__title"><span>学号</span></div>
                     <div class="van-cell__value">
-                        <span id="stuid" class="text-black" data-v-fae8cc3a="">
-                            <font color="#9c9c9c">
+                        <!-- <span id="stuid" class="text-black stuinfo" data-v-fae8cc3a="">
                                 3119114514
-                            </font>
-                        </span>
+                        </span> -->
+                        <input value="3119114514" id="stuid" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
                     <div class="van-cell__title"><span>学院</span></div>
                     <div class="van-cell__value">
-                        <span class="text-black" data-v-fae8cc3a="">
-                            <font color="#9c9c9c">
+                        <!-- <span class="text-black stuinfo" data-v-fae8cc3a="">
                                 经济与贸易学院
-                            </font>
-                        </span>
+                        </span> -->
+                        <input value="经济与贸易学院"  type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
                     <div class="van-cell__title"><span>专业</span></div>
                     <div class="van-cell__value">
-                        <span class="text-black" data-v-fae8cc3a="">
-                            <font color="#9c9c9c">
+                        <!-- <span class="text-black stuinfo" data-v-fae8cc3a="">
                                 金融工程
-                            </font>
-
-                        </span>
+                        </span> -->
+                        <input value="金融工程"  type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
                 <div class="van-cell" data-v-fae8cc3a="">
                     <div class="van-cell__title"><span>班级</span></div>
                     <div class="van-cell__value">
-                        <span class="text-black" data-v-fae8cc3a="">
-                            <font color="#9c9c9c">
+                        <!-- <span class="text-black stuinfo" data-v-fae8cc3a="">
                                 金融工程19(1)
-                            </font>
-                        </span>
+                        </span> -->
+                        <input value="金融工程19(1)" type="text" class="van-field__control van-field__control--right stuinfo" placeholder="可输入">
                     </div>
                 </div>
             </div>
@@ -139,8 +143,8 @@
     // 时钟
     setInterval("document.getElementById('dateTime').innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');", 1000);
 
-    document.getElementById('outtime').innerHTML = localStorage.getItem("prevDateTxt_s");
-    document.getElementById('backtime').innerHTML = localStorage.getItem("nextDateTxt_s");
+    document.getElementById('outtime').value = localStorage.getItem("prevDateTxt_s");
+    document.getElementById('backtime').value = localStorage.getItem("nextDateTxt_s");
 </script>
 
 </body>
