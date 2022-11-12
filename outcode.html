@@ -21,6 +21,8 @@
     <link href="./statics/chunk-vendors.583191b8.css" rel="stylesheet">
     <link href="./statics/11845stu.aa8f741d.css" rel="stylesheet">
     <script src="./statics/cookie.js"></script>
+    <script src="./statics/jquery-2.0.2.min.js"></script>
+
 
 </head>
 
@@ -128,15 +130,15 @@
 
     // 填入信息
     if (stuName != null && stuName != "")
-        document.getElementById('stuName').value = stuName ;
+        $('#stuName').val(stuName) ;
     if (stuID != null && stuID != "")
-        document.getElementById('stuID').value = stuID;
+        $('#stuID').val(stuID);
     if (stuSchool != null && stuSchool != "")
-        document.getElementById('stuSchool').value = stuSchool ;
+        $('#stuSchool').val(stuSchool) ;
     if (stuMajor != null && stuMajor != "") {
-        document.getElementById('stuMajor').value = stuMajor;
+        $('#stuMajor').val(stuMajor);
         if (stuClass != null && stuClass != "" && stuGrade != null && stuGrade != "")
-            document.getElementById('stuFullClassName').value = (stuMajor + stuGrade + "(" +stuClass + ")");
+            $('#stuFullClassName').val(stuMajor + stuGrade + "(" +stuClass + ")");
     }
 
 </script>
@@ -161,8 +163,24 @@
     // 时钟
     setInterval("document.getElementById('dateTime').innerHTML = (new Date()).format('yyyy-MM-dd hh:mm:ss');", 1000);
 
-    document.getElementById('outtime').value = localStorage.getItem("prevDateTxt_s");
-    document.getElementById('backtime').value = localStorage.getItem("nextDateTxt_s");
+    $('#outtime' ).val(localStorage.getItem("prevDateTxt_s") );
+    $('#backtime').val(localStorage.getItem("nextDateTxt_s") );
+</script>
+
+<script>
+    $("#stuName"  ).blur(function() { if(this.value != "") setCookie("stuName"  , $(this).val()); });
+    $("#stuID"    ).blur(function() { if(this.value != "") setCookie("stuID"    , $(this).val()); });
+    $("#stuSchool").blur(function() { if(this.value != "") setCookie("stuSchool", $(this).val()); });
+    $("#stuMajor" ).blur(function() {
+        if(this.value != "") {
+            setCookie("stuMajor" , $(this).val());
+            //var stuMajor  = getCookie("stuMajor" );
+            var stuGrade  = getCookie("stuGrade" );
+            var stuClass  = getCookie("stuClass" );
+            $('#stuFullClassName').val(this.value + stuGrade + "(" +stuClass + ")");
+        }
+    });
+
 </script>
 
 </body>

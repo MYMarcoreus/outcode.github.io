@@ -7,7 +7,6 @@ function setCookie(ckey,cvalue, exdays=60){
         ckey +"="+  encodeURIComponent(cvalue) +"; "+
         expires+"; " +
         "path=./"
-    console.log(cookie_str);
     document.cookie = cookie_str
     console.log(document.cookie);
 }
